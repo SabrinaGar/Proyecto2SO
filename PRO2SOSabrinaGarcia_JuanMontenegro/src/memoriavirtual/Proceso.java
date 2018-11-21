@@ -18,8 +18,8 @@ public class Proceso {
     private Pagina tablaPaginas[];
     private int tamanioT;
     private int totalPaginas;
-    private int paginasPrincipal;
-    private int paginasSecundaria;
+    private int paginasPrincipal=0;
+    private int paginasSecundaria=0;
     private int id;// no se si  lo usaremos
     private int tamanioPagina;
 
@@ -81,6 +81,12 @@ public class Proceso {
     }
 
     public int getPaginasPrincipal() {
+        for (int i = 0; i < tablaPaginas.length; i++) {
+            Pagina tablaPagina = tablaPaginas[i];
+            if(tablaPaginas[i].isEnMP()){
+                paginasPrincipal++;
+            }
+        }
         return paginasPrincipal;
     }
 
@@ -89,6 +95,7 @@ public class Proceso {
     }
 
     public int getPaginasSecundaria() {
+        paginasSecundaria = totalPaginas - paginasPrincipal;
         return paginasSecundaria;
     }
 

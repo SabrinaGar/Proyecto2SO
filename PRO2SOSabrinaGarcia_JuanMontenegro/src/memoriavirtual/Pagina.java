@@ -16,13 +16,22 @@ public class Pagina {
     private int  marcoIndex;
     private int pagIndex;
     private int IdProceso;
+    private String nombreProceso;
 
-    public Pagina(int tamanio, boolean enMP, int marcoIndex, int pagIndex, int IdProceso) {
+    public Pagina(int tamanio, boolean enMP, int marcoIndex, int pagIndex, int IdProceso, String nombreProceso) {
         this.tamanio = tamanio;
         this.enMP = enMP;
         this.marcoIndex = marcoIndex;
         this.pagIndex = pagIndex;
         this.IdProceso = IdProceso;
+        this.nombreProceso = nombreProceso;
+    }
+    public Pagina(int marcoIndex) {
+        this.marcoIndex = marcoIndex;
+        this.enMP = true;
+        this.IdProceso = -1;
+        this.nombreProceso = "";
+        this.pagIndex = -1;
     }
 
     public int getTamanio() {
@@ -63,6 +72,10 @@ public class Pagina {
 
     public void setIdProceso(int IdProceso) {
         this.IdProceso = IdProceso;
+    }
+
+    public String getNombreProceso() {
+        return nombreProceso;
     }
     
     
