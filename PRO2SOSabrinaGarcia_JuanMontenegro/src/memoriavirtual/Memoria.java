@@ -1,5 +1,7 @@
 package memoriavirtual;
 
+import java.util.ArrayDeque;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -21,6 +23,7 @@ public class Memoria {
     private int marcosMPDisponibles;
     private int marcosMSDisponibles;
     private int marcosMP, marcosMS;
+    private ArrayDeque listaFifo;
 
     public Memoria(int tamanioMP, int tamanioMS, int tamanioPagina) {
         this.tamanioMP = tamanioMP;
@@ -34,6 +37,7 @@ public class Memoria {
         this.marcosMS = tamanioTMS/tamanioPagina;
         this.marcosMPDisponibles = marcosMP;
         this.marcosMSDisponibles = marcosMS;
+        this.listaFifo = new ArrayDeque<Proceso>();
         IniciarMP();
         IniciarMS();
         System.out.println(this.tamanioTMP);
@@ -106,7 +110,7 @@ public class Memoria {
             }
             
         }
-        
+        listaFifo.addFirst(proceso);
     }
     
     private void SuspenderProceso(Proceso proceso){
@@ -122,6 +126,15 @@ public class Memoria {
             
         }
         proceso.setEstado("Suspendido");
+        listaFifo.remove(proceso);
+    }
+    
+        private void BloquearProceso(Proceso proceso){
+        if(proceso.getEstado().toLowerCase().equals("bloqueado")){
+            System.out.println("El proceso ya se encuentra bloqueado.");
+        }
+        proceso.setEstado("Bloqueado");
+        
     }
     
     private int getMarcoMPDisponible() {
@@ -153,5 +166,17 @@ public class Memoria {
             proceso.setEstado("Listo");
         }
     }
-            
+    
+    private int Fifo(){
+        Proceso proceso = (Proceso) listaFifo.getFirst();
+        for (int i = 0; i < paginasMP.length; i++) {
+            if(proceso.getTablaPaginas()[i].isEnMP()){
+                procesoActivoListo(proceso);
+            return proceso.getTablaPaginas()[i].getMarcoIndex();
+        }
+    }
+        listaFifo.removeFirst();
+        return Fifo();
+    }
+    
 }
