@@ -42,13 +42,13 @@ public class Memoria {
 
     private void IniciarMP() {
         for(int i = 0; i < marcosMP;i++) {
-            this.paginasMP[i] = new Pagina(i);
+            this.paginasMP[i] = new Pagina(i,true);
         }
     }
     
     private void IniciarMS() {
         for(int i = 0; i < marcosMS;i++) {
-            this.paginasMS[i] = new Pagina(i);
+            this.paginasMS[i] = new Pagina(i,false);
         }
     }
     
@@ -64,7 +64,7 @@ public class Memoria {
     }
     
     private void eliminarPaginaMP(int pos) {
-        paginasMP[pos] = new Pagina(pos);
+        paginasMP[pos] = new Pagina(pos,true);
         marcosMPDisponibles++;
     }
     
@@ -80,20 +80,48 @@ public class Memoria {
     }
     
     private void eliminarPaginaMS(int pos) {
-        paginasMP[pos] = new Pagina(pos);
+        paginasMP[pos] = new Pagina(pos,false);
         marcosMPDisponibles++;
     }
     
-    public void activarProceso(Proceso proceso, int pagina) {
-        eliminarProcesoAlmacenamiento(proceso.getTablaPaginas()[pagina].getIdMarco());
-        agregarProcesoMemoria(proceso, pagina);
-        memoriaPrincipal -= tamañoPagina;
-        proceso.setPaginasMemoriaPrincipal(proceso.getPaginasMemoriaPrincipal()+1);
-        proceso.setPaginasMemoriaSecundaria(proceso.getPaginasMemoriaSecundaria()-1);
-        procesoActivoListo(proceso);
-        textArea.append("- Se ha puesto la pagina del proceso de id "+proceso.getIdProceso()+" pasando "+proceso.getPaginasMemoriaSecundaria()+" paginas de memoria secundaria a memoria principal\n");
-        mostrarEspaciosDisponibles();
-        mostrarEspaciosDisponiblesAlmacenamiento();
+    public void activarProceso(Proceso proceso) {
+        int j=0;
+        for (int i = 0; i < paginasMP.length; i++) {
+            
+            if(paginasMP[i].getIdProceso() == proceso.getId()){
+                j++;
+            }
+        }
+        if(j>proceso.getTotalPaginas()/2){
+            System.out.println("El proceso se encuentra en ejecucion");
+            return;
+        }
+        j=0;
+        for (int i = 0; i < proceso.getTablaPaginas().length; i++) {
+            if(!proceso.getTablaPaginas()[i].isEnMP() && proceso.getPaginasPrincipal()>proceso.getTotalPaginas()/2){
+                int aux = getMarcoMPDisponible();
+                paginasMP[aux] = proceso.getTablaPaginas()[i];
+                proceso.getTablaPaginas()[i].setMarcoIndex(aux);
+                proceso.getTablaPaginas()[i].setEnMP(true);
+            }
+            
+        }
+        
+    }
+    
+    private void SuspenderProceso(Proceso proceso){
+        if(proceso.getEstado().toLowerCase().equals("suspendido")){
+            System.out.println("El proceso ya se encuentra suspendido.");
+        }
+        for (int i = 0; i < paginasMP.length; i++) {
+            if(paginasMP[i].getIdProceso()==proceso.getId()){
+                int aux = getMarcoMSDisponible();
+                paginasMS[aux]=paginasMP[i];
+                paginasMP[i]= new Pagina(i,true);
+            }
+            
+        }
+        proceso.setEstado("Suspendido");
     }
     
     private int getMarcoMPDisponible() {

@@ -18,17 +18,17 @@ public class Pagina {
     private int IdProceso;
     private String nombreProceso;
 
-    public Pagina(int tamanio, boolean enMP, int marcoIndex, int pagIndex, int IdProceso, String nombreProceso) {
+    public Pagina(int tamanio, int marcoIndex, int pagIndex, int IdProceso, String nombreProceso) {
         this.tamanio = tamanio;
-        this.enMP = enMP;
+        this.enMP = false;
         this.marcoIndex = marcoIndex;
         this.pagIndex = pagIndex;
         this.IdProceso = IdProceso;
         this.nombreProceso = nombreProceso;
     }
-    public Pagina(int marcoIndex) {
+    public Pagina(int marcoIndex, boolean enMP) {
         this.marcoIndex = marcoIndex;
-        this.enMP = true;
+        this.enMP = enMP;
         this.IdProceso = -1;
         this.nombreProceso = "";
         this.pagIndex = -1;
