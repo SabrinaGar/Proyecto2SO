@@ -36,7 +36,7 @@ public class Memoria {
         this.marcosMSDisponibles = marcosMS;
         IniciarMP();
         IniciarMS();
-        System.out.println(this.tamanioTMP);
+      
     }
     
 
